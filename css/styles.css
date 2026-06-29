@@ -1,0 +1,1050 @@
+:root {
+    /* Refined Hyper-Light Palette */
+    --bg-primary: #fcfcfd;
+    --bg-secondary: #ffffff;
+    --surface: rgba(255, 255, 255, 0.85);
+    --surface-solid: #ffffff;
+    
+    --primary: #2563eb;
+    --primary-gradient: linear-gradient(135deg, #2563eb, #4f46e5);
+    --accent: #f59e0b;
+    --rose: #f43f5e;
+    
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #94a3b8;
+    
+    --border: rgba(0, 0, 0, 0.08);
+    --border-bright: rgba(37, 99, 235, 0.2);
+    
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.08);
+    --shadow-vibrant: 0 20px 40px -10px rgba(37, 99, 235, 0.12);
+    
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --space-base: 8px;
+}
+
+/* Base Optimization */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.hidden { display: none !important; }
+
+/* 1. Animated Background (Floating Blobs & 3D Grid) */
+.floating-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    overflow: hidden;
+    perspective: 1000px;
+}
+
+.perspective-grid {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background-image: 
+        linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: rotateX(60deg);
+    animation: gridMove 20s infinite linear;
+    z-index: -3;
+}
+
+@keyframes gridMove {
+    from { transform: rotateX(60deg) translateY(0); }
+    to { transform: rotateX(60deg) translateY(50px); }
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    animation: floatBlob 15s infinite alternate ease-in-out;
+}
+
+.blob-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; right: -50px; }
+.blob-2 { width: 350px; height: 350px; background: var(--rose); bottom: -100px; left: -50px; animation-delay: -3s; }
+
+@keyframes floatBlob {
+    from { transform: translate(0, 0); }
+    to { transform: translate(40px, 80px); }
+}
+
+/* 2. Landing Hero - 3D Optimized Layout */
+#landing-view {
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.hero-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.hero-content {
+    perspective: 1000px; /* Enable 3D for content */
+}
+
+/* 3D Animation 1: Floating Title with depth */
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: -0.04em;
+    transform-style: preserve-3d;
+}
+
+.text-gradient {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin-bottom: 2rem;
+}
+
+/* 3D Animation 2: Perspective Tilt Search Bar */
+.hero-search-form-hyper {
+    max-width: 550px;
+    perspective: 1000px;
+    margin-bottom: 2.5rem;
+}
+
+.search-inner {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 10px 14px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-vibrant);
+    border: 1px solid var(--border);
+    transition: all 400ms var(--ease-out-expo);
+}
+
+.search-inner:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.2);
+    border-color: var(--primary);
+}
+
+.search-inner input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1.15rem;
+    padding: 12px 16px;
+    outline: none;
+    font-weight: 500;
+}
+
+.btn-hyper {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 300ms ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-hyper:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* 3D Animation 3: Floating 3D Tags */
+.hero-features {
+    display: flex;
+    gap: 1rem;
+    transform-style: preserve-3d;
+}
+
+.feature-tag {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+    padding: 6px 14px;
+    background: white;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    animation: floatTag 4s infinite alternate ease-in-out;
+}
+
+@keyframes floatTag {
+    from { transform: translateZ(10px) translateY(0); }
+    to { transform: translateZ(30px) translateY(-10px); }
+}
+
+/* 3D Animation 4 & 5: Complex 3D Scene (Cube + Pyramid) */
+.hero-3d-scene {
+    position: relative;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+}
+
+/* Cube Refined */
+.cube-container {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 5%;
+    right: 10%;
+    transform-style: preserve-3d;
+    animation: orbit 20s infinite linear;
+}
+
+.cube {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    animation: rotateCube 10s infinite linear;
+}
+
+.face {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary);
+    backdrop-filter: blur(5px);
+}
+
+.front  { transform: rotateY(0deg) translateZ(75px); }
+.back   { transform: rotateY(180deg) translateZ(75px); }
+.right  { transform: rotateY(90deg) translateZ(75px); }
+.left   { transform: rotateY(-90deg) translateZ(75px); }
+.top    { transform: rotateX(90deg) translateZ(75px); }
+.bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+/* NEW 3D Object: Floating Pyramid */
+.pyramid-container {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 50px;
+    left: 20px;
+    transform-style: preserve-3d;
+    animation: floatPyramid 8s infinite alternate ease-in-out;
+}
+
+.pyramid {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    transform-style: preserve-3d;
+    animation: rotateCube 15s infinite linear reverse;
+}
+
+.p-face {
+    position: absolute;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 100px solid rgba(244, 63, 94, 0.8);
+    transform-origin: 50% 100%;
+}
+
+.p-front  { transform: rotateX(30deg) translateZ(0); }
+.p-back   { transform: rotateY(180deg) rotateX(30deg); }
+.p-right  { transform: rotateY(90deg) rotateX(30deg); }
+.p-left   { transform: rotateY(-90deg) rotateX(30deg); }
+
+@keyframes rotateCube {
+    from { transform: rotateX(0) rotateY(0); }
+    to { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+@keyframes orbit {
+    from { transform: rotateY(0) translateX(50px) rotateY(0); }
+    to { transform: rotateY(360deg) translateX(50px) rotateY(-360deg); }
+}
+
+/* Dashboard Page Optimizations */
+.app-header-hyper {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo { font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-main); }
+.logo-icon { color: var(--primary); }
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-top: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .grid-layout { grid-template-columns: 340px 1fr; gap: 3rem; }
+}
+
+/* Dashboard 3D Animation 1: Card Hover Tilt */
+.card-hyper {
+    background: var(--surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 400ms var(--ease-out-expo);
+}
+
+.card-hyper:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+/* Dashboard 3D Animation 2: Animated Chart Container Entrance */
+.chart-card-hyper {
+    animation: reveal3D 1s var(--ease-out-expo) forwards;
+}
+
+@keyframes reveal3D {
+    from { opacity: 0; transform: translateZ(-100px) rotateX(-20deg); }
+    to { opacity: 1; transform: translateZ(0) rotateX(0); }
+}
+
+/* Repositories Density Fix */
+.repos-grid-hyper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+}
+
+.repo-card-hyper {
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem;
+    border-radius: 20px;
+    background: var(--surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    transition: all 400ms var(--ease-out-expo);
+}
+
+.repo-name { font-size: 1.25rem; font-weight: 700; color: var(--primary); text-decoration: none; margin-bottom: 0.5rem; display: block; }
+.repo-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 1.5rem; flex-grow: 1; }
+
+/* Dashboard 3D Animation 3: Repository Card Lift */
+.repo-card-hyper:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+}
+
+/* Mobile Fixes */
+@media (max-width: 1024px) {
+    .hero-layout { grid-template-columns: 1fr; text-align: center; }
+    .hero-3d-scene { height: 250px; margin-top: 2rem; }
+    .hero-content { display: flex; flex-direction: column; align-items: center; }
+    .hero-search-form-hyper { width: 100%; }
+    .hero-features { justify-content: center; }
+}
+
+@media (max-width: 640px) {
+    .hero-title { font-size: 2.25rem; }
+    .search-inner { flex-direction: column; border-radius: 24px; }
+    .btn-hyper { width: 100%; margin-top: 8px; }
+    .nav-search-hyper { display: none; }
+    .repos-grid-hyper { grid-template-columns: 1fr; }
+}
+
+/* Common Animations */
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+    opacity: 0;
+    animation: slideUpFade 800ms var(--ease-out-expo) forwards;
+}
+
+.repos-grid-hyper > * {
+    opacity: 0;
+    animation: slideUpFade 800ms var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--stagger-idx, 0) * 50ms);
+}
+
+/* Feature Tag Alignment */
+.feature-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feature-tag i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Navigation Header Styling */
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-search-hyper {
+    display: flex;
+    align-items: center;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 6px 14px;
+    gap: 8px;
+    transition: all 300ms ease;
+}
+
+.nav-search-hyper:focus-within {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-search-hyper input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.nav-search-hyper i {
+    color: var(--text-dim);
+    width: 16px;
+    height: 16px;
+}
+
+/* Profile Card Styling */
+.profile-card-hyper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.avatar-hyper {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: var(--shadow-md), 0 0 0 2px var(--primary);
+    margin-bottom: 1rem;
+}
+
+.profile-name {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+}
+
+.profile-username {
+    font-size: 0.95rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+.profile-bio {
+    margin-top: 1rem;
+    font-size: 0.95rem !important;
+    line-height: 1.5;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 1rem;
+    border: 1px solid var(--border);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+.profile-info {
+    font-size: 0.9rem;
+}
+
+.profile-info i {
+    color: var(--primary);
+}
+
+/* 3D Scene Optimizations */
+.face {
+    backface-visibility: hidden;
+}
+
+.pyramid-container {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    bottom: 5%;
+    right: 20%;
+    top: auto;
+    left: auto;
+    transform-style: preserve-3d;
+    animation: floatPyramid 6s infinite alternate ease-in-out;
+}
+
+@keyframes floatPyramid {
+    from { transform: translateY(0) rotateY(0deg); }
+    to { transform: translateY(-20px) rotateY(180deg); }
+}
+
+/* Dashboard Cards 3D Parallax Tilt styling */
+.profile-card-hyper, .chart-card-hyper {
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+}
+
+.profile-card-hyper .avatar-hyper {
+    transform: translateZ(40px);
+}
+
+.profile-card-hyper .profile-name {
+    transform: translateZ(30px);
+}
+
+.profile-card-hyper .profile-username {
+    transform: translateZ(25px);
+    display: inline-block;
+}
+
+.profile-card-hyper .profile-stats {
+    transform: translateZ(35px);
+    transform-style: preserve-3d;
+}
+
+.profile-card-hyper .profile-stats .stat-item {
+    transform: translateZ(10px);
+}
+
+.profile-card-hyper .profile-info {
+    transform: translateZ(20px);
+}
+
+.chart-card-hyper h3 {
+    transform: translateZ(30px);
+}
+
+.chart-card-hyper .chart-box {
+    transform: translateZ(40px);
+}
+
+.chart-card-hyper .legend-box {
+    transform: translateZ(20px);
+}
+
+/* 2. Floating 3D Node Constellation (Git Graph) */
+#git-graph-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 3. The 3D Layered Card Flip (The Developer Profile Preview) */
+.mock-card-container {
+    position: absolute;
+    width: 300px;
+    height: 250px;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    z-index: 5;
+    left: 0%;
+    top: 15%;
+    animation: floatCard 4s infinite alternate ease-in-out;
+}
+
+@keyframes floatCard {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-12px); }
+}
+
+.mock-profile-card {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.mock-profile-card.reveal-flip {
+    transform: rotateY(180deg);
+}
+
+.mock-card-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.08), 0 0 50px rgba(37, 99, 235, 0.04);
+    transform-style: preserve-3d;
+}
+
+.mock-card-front {
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+.mock-card-back {
+    transform: rotateY(180deg);
+}
+
+.mock-profile-card:hover {
+    box-shadow: 0 45px 85px -20px rgba(37, 99, 235, 0.15), 0 0 60px rgba(37, 99, 235, 0.05);
+}
+
+.mock-card-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(255,255,255,0.8) 0%, transparent 60%);
+    pointer-events: none;
+    transform: translateZ(1px);
+    z-index: 10;
+}
+
+/* Skeleton Shimmer Styles */
+.skeleton-shimmer {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.04) 25%,
+        rgba(0, 0, 0, 0.09) 50%,
+        rgba(0, 0, 0, 0.04) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.mock-avatar-wrapper.skeleton-shimmer {
+    background-size: 200% 100%;
+    border: none;
+    box-shadow: none;
+}
+
+.mock-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+    transform: translateZ(50px);
+    transform-style: preserve-3d;
+}
+
+.mock-avatar-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transform: translateZ(30px);
+}
+
+.mock-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mock-user-info {
+    transform-style: preserve-3d;
+}
+
+.mock-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.mock-handle {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.mock-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transform: translateZ(40px);
+    transform-style: preserve-3d;
+}
+
+.mock-stat-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    transform: translateZ(20px);
+}
+
+.mock-languages {
+    display: flex;
+    height: 6px;
+    border-radius: 100px;
+    overflow: hidden;
+    background: var(--border);
+    transform: translateZ(35px);
+}
+
+.mock-lang-track {
+    height: 100%;
+}
+
+.mock-repo-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: rgba(37, 99, 235, 0.08);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+    border: 1px solid rgba(37, 99, 235, 0.1);
+    transform: translateZ(15px);
+}
+
+/* Dashboard Spacing & Custom Elements */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.repos-header-hyper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.title-group i {
+    color: var(--primary);
+}
+
+.badge-hyper {
+    font-size: 0.85rem;
+    padding: 3px 10px;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 100px;
+    margin-left: 8px;
+    font-weight: 700;
+}
+
+/* Custom Sort Dropdown */
+.sort-wrapper-hyper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 6px 14px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.3s ease;
+}
+
+.sort-wrapper-hyper:hover {
+    border-color: var(--primary);
+}
+
+.sort-wrapper-hyper select {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding-right: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.sort-wrapper-hyper i {
+    color: var(--primary);
+    width: 16px;
+    height: 16px;
+}
+
+/* Card Header & Content Layout */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.75rem;
+}
+
+.card-header i {
+    color: var(--primary);
+    width: 20px;
+    height: 20px;
+}
+
+.chart-box {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.75rem;
+}
+
+.legend-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ------------------------------------------------------------- */
+/* FOUR MULTIPLE DASHBOARD 3D ANIMATED SHAPES                    */
+/* ------------------------------------------------------------- */
+
+/* Shared Wrapper */
+.mini-3d-scene {
+    width: 24px;
+    height: 24px;
+    perspective: 400px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+/* 1. Profile Cube */
+.mini-cube {
+    width: 14px;
+    height: 14px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spinCube 6s infinite linear;
+}
+
+.m-face {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: rgba(37, 99, 235, 0.45);
+    border: 1px solid var(--primary);
+    backdrop-filter: blur(2px);
+}
+
+.m-front  { transform: rotateY(0deg) translateZ(7px); }
+.m-back   { transform: rotateY(180deg) translateZ(7px); }
+.m-right  { transform: rotateY(90deg) translateZ(7px); }
+.m-left   { transform: rotateY(-90deg) translateZ(7px); }
+.m-top    { transform: rotateX(90deg) translateZ(7px); }
+.m-bottom { transform: rotateX(-90deg) translateZ(7px); }
+
+@keyframes spinCube {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* 2. Repos Octahedron (Double Pyramid) */
+.mini-octa {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spinOcta 8s infinite linear;
+}
+
+.o-face {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    transform-origin: 50% 100%;
+}
+
+/* Top half */
+.o-top-front  { border-bottom: 12px solid rgba(244, 63, 94, 0.4); transform: rotateX(30deg) translateZ(0); }
+.o-top-back   { border-bottom: 12px solid rgba(244, 63, 94, 0.4); transform: rotateY(180deg) rotateX(30deg); }
+.o-top-right  { border-bottom: 12px solid rgba(244, 63, 94, 0.4); transform: rotateY(90deg) rotateX(30deg); }
+.o-top-left   { border-bottom: 12px solid rgba(244, 63, 94, 0.4); transform: rotateY(-90deg) rotateX(30deg); }
+
+/* Bottom half (flipped) */
+.o-bottom-front { border-top: 12px solid rgba(244, 63, 94, 0.45); transform: translateY(12px) rotateX(-30deg) rotateY(0deg); }
+.o-bottom-back  { border-top: 12px solid rgba(244, 63, 94, 0.45); transform: translateY(12px) rotateY(180deg) rotateX(-30deg); }
+.o-bottom-right { border-top: 12px solid rgba(244, 63, 94, 0.45); transform: translateY(12px) rotateY(90deg) rotateX(-30deg); }
+.o-bottom-left  { border-top: 12px solid rgba(244, 63, 94, 0.45); transform: translateY(12px) rotateY(-90deg) rotateX(-30deg); }
+
+@keyframes spinOcta {
+    0% { transform: rotateY(0deg) rotateX(15deg); }
+    100% { transform: rotateY(360deg) rotateX(15deg); }
+}
+
+/* 3. Tech Stack Gyro Ring */
+.tech-gyro {
+    width: 28px;
+    height: 28px;
+}
+
+.mini-gyro-ring {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 2px dashed var(--accent);
+    border-radius: 50%;
+    transform-style: preserve-3d;
+}
+
+.ring-x {
+    animation: spinGyroX 4s infinite linear;
+}
+
+.ring-y {
+    border-color: var(--primary);
+    animation: spinGyroY 4s infinite linear;
+}
+
+@keyframes spinGyroX {
+    0% { transform: rotateX(0deg) rotateY(45deg); }
+    100% { transform: rotateX(360deg) rotateY(45deg); }
+}
+
+@keyframes spinGyroY {
+    0% { transform: rotateX(45deg) rotateY(0deg); }
+    100% { transform: rotateX(45deg) rotateY(360deg); }
+}
+
+/* 4. Dashboard Git Graph Canvas Background */
+#app-git-graph-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}

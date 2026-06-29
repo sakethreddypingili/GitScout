@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitScout | Hyper-Premium Developer Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='20' y='20' width='60' height='60' rx='12' fill='%232563eb'/></svg>">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="hyper-light">
+    <!-- Parallax Mesh Background -->
+    <div class="parallax-bg" id="parallax-bg"></div>
+    <div class="floating-blobs">
+        <div class="perspective-grid"></div>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Landing View -->
+    <section id="landing-view" class="view">
+        <canvas id="git-graph-canvas"></canvas>
+        <div class="container hero-container">
+            <div class="hero-layout">
+                <div class="hero-content">
+                    <div class="badge-reveal">
+                        <span class="premium-badge">Next-Gen Analytics</span>
+                    </div>
+                    <h1 class="hero-title fade-in-up">
+                        Discover the <span class="text-gradient">Developer</span> Universe
+                    </h1>
+                    <p class="hero-subtitle fade-in-up" style="animation-delay: 100ms;">
+                        A hyper-performance engine for GitHub exploration. Zero dependencies. Pure motion.
+                    </p>
+                    
+                    <form id="landing-search-form" class="hero-search-form-hyper fade-in-up" style="animation-delay: 200ms;">
+                        <div class="search-inner">
+                            <i data-lucide="search" class="search-icon"></i>
+                            <input type="search" id="landing-search-input" placeholder="Search GitHub username..." required>
+                            <button type="submit" class="btn-hyper">
+                                <span>Analyze</span>
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+ 
+                    <div class="hero-features fade-in-up" style="animation-delay: 300ms;">
+                        <div class="feature-tag"><i data-lucide="zap"></i><span>Instant</span></div>
+                        <div class="feature-tag"><i data-lucide="shield-check"></i><span>Secure</span></div>
+                        <div class="feature-tag"><i data-lucide="layers"></i><span>Native</span></div>
+                    </div>
+                </div>
+
+                <!-- 3D CSS Object Section -->
+                <div class="hero-3d-scene">
+                    <div class="cube-container">
+                        <div class="cube">
+                            <div class="face front"><i data-lucide="github" size="40"></i></div>
+                            <div class="face back"><i data-lucide="code" size="40"></i></div>
+                            <div class="face right"><i data-lucide="git-branch" size="40"></i></div>
+                            <div class="face left"><i data-lucide="star" size="40"></i></div>
+                            <div class="face top"><i data-lucide="terminal" size="40"></i></div>
+                            <div class="face bottom"><i data-lucide="cpu" size="40"></i></div>
+                        </div>
+                    </div>
+                    <div class="pyramid-container">
+                        <div class="pyramid">
+                            <div class="p-face p-front"></div>
+                            <div class="p-face p-back"></div>
+                            <div class="p-face p-right"></div>
+                            <div class="p-face p-left"></div>
+                        </div>
+                    </div>
+
+                    <!-- Holographic 3D Card Preview -->
+                    <div class="mock-card-container">
+                        <div class="mock-profile-card">
+                            <div class="mock-card-glow"></div>
+                            
+                            <!-- Front Side: Skeleton Loader -->
+                            <div class="mock-card-face mock-card-front">
+                                <div class="mock-header">
+                                    <div class="mock-avatar-wrapper skeleton-shimmer"></div>
+                                    <div class="mock-user-info" style="width: 120px;">
+                                        <div class="skeleton-line skeleton-shimmer" style="width: 100%; height: 16px; border-radius: 4px; margin-bottom: 8px;"></div>
+                                        <div class="skeleton-line skeleton-shimmer" style="width: 60%; height: 12px; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="mock-body">
+                                    <div class="mock-stat-bar">
+                                        <div class="skeleton-line skeleton-shimmer" style="width: 40%; height: 14px; border-radius: 4px;"></div>
+                                        <div class="skeleton-line skeleton-shimmer" style="width: 35%; height: 14px; border-radius: 4px;"></div>
+                                    </div>
+                                    <div class="mock-languages skeleton-shimmer" style="background: rgba(0,0,0,0.05); height: 8px; border-radius: 100px;"></div>
+                                    <div class="mock-repo-item skeleton-shimmer" style="height: 36px; border: none; background: rgba(0,0,0,0.04);"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Back Side: Actual Mock Profile -->
+                            <div class="mock-card-face mock-card-back">
+                                <div class="mock-header">
+                                    <div class="mock-avatar-wrapper" style="display: flex; align-items: center; justify-content: center; background: rgba(37, 99, 235, 0.1); color: var(--primary);">
+                                        <i data-lucide="user" size="24"></i>
+                                    </div>
+                                    <div class="mock-user-info">
+                                        <div class="mock-name">Elena Rostova</div>
+                                        <div class="mock-handle">@elena-dev</div>
+                                    </div>
+                                </div>
+                                <div class="mock-body">
+                                    <div class="mock-stat-bar" style="display: flex; gap: 16px;">
+                                        <span class="mock-stat" style="display: flex; align-items: center; gap: 4px;"><i data-lucide="star" size="14" style="color: var(--accent);"></i> <strong>1.2k</strong> stars</span>
+                                        <span class="mock-stat" style="display: flex; align-items: center; gap: 4px;"><i data-lucide="folder" size="14" style="color: var(--primary);"></i> <strong>42</strong> repos</span>
+                                    </div>
+                                    <div class="mock-languages">
+                                        <div class="mock-lang-track" style="width: 50%; background: #3178c6;"></div>
+                                        <div class="mock-lang-track" style="width: 30%; background: #f1e05a;"></div>
+                                        <div class="mock-lang-track" style="width: 20%; background: #563d7c;"></div>
+                                    </div>
+                                    <div class="mock-repo-item">
+                                        <i data-lucide="book-marked" size="14"></i>
+                                        <span>neural-router</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App View -->
+    <section id="app-view" class="view hidden">
+        <canvas id="app-git-graph-canvas"></canvas>
+        <header class="app-header-hyper">
+            <div class="container nav-container">
+                <a href="/" class="logo" id="back-to-landing">
+                    <i data-lucide="box" class="logo-icon"></i>
+                    <span>GitScout</span>
+                </a>
+                <form id="app-search-form" class="nav-search-hyper">
+                    <i data-lucide="search"></i>
+                    <input type="search" id="app-search-input" placeholder="Quick search..." required>
+                </form>
+            </div>
+        </header>
+
+        <main id="app" class="container app-main">
+            <div id="status-container"></div>
+            
+            <div id="content" class="grid-layout hidden">
+                <aside class="sidebar">
+                    <section id="profile-container" class="card-hyper profile-card-hyper"></section>
+                    <section id="chart-container" class="card-hyper chart-card-hyper">
+                        <div class="card-header">
+                            <i data-lucide="pie-chart"></i>
+                            <h3>Tech Stack</h3>
+                            <div class="mini-3d-scene tech-gyro" style="margin-left: auto;">
+                                <div class="mini-gyro-ring ring-x"></div>
+                                <div class="mini-gyro-ring ring-y"></div>
+                            </div>
+                        </div>
+                        <div id="languages-chart" class="chart-box"></div>
+                        <div id="chart-legend" class="legend-box"></div>
+                    </section>
+                </aside>
+
+                <section class="main-content">
+                    <div class="repos-header-hyper">
+                        <div class="title-group">
+                            <i data-lucide="folder-git-2"></i>
+                            <h2>Repositories <span id="repos-count" class="badge-hyper"></span></h2>
+                            <div class="mini-3d-scene repos-octa" style="margin-left: 10px;">
+                                <div class="mini-octa">
+                                    <div class="o-face o-top-front"></div>
+                                    <div class="o-face o-top-back"></div>
+                                    <div class="o-face o-top-right"></div>
+                                    <div class="o-face o-top-left"></div>
+                                    <div class="o-face o-bottom-front"></div>
+                                    <div class="o-face o-bottom-back"></div>
+                                    <div class="o-face o-bottom-right"></div>
+                                    <div class="o-face o-bottom-left"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sort-wrapper-hyper">
+                            <i data-lucide="filter"></i>
+                            <select id="sort-select">
+                                <option value="stars">Stars</option>
+                                <option value="forks">Forks</option>
+                                <option value="updated">Updated</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="repos-container" class="repos-grid-hyper"></div>
+                    <p id="pagination-notice" class="notice-hyper hidden">
+                        <i data-lucide="info" size="14"></i>
+                        Showing top 100 repositories
+                    </p>
+                </section>
+            </div>
+        </main>
+    </section>
+
+    <footer class="footer-hyper">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">GitScout</div>
+                <div class="footer-copy">© 2026 Crafted with pure CSS & JS</div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+    <script>
+        // Initialize Lucide icons
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
