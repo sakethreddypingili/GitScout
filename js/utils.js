@@ -38,3 +38,32 @@ function parseCalendarDate(isoString) {
     return 'Invalid Date';
   }
 }
+
+/**
+ * Sanitizes input text to prevent XSS.
+ * Removes HTML special characters.
+ * @param {string} text - Input query string
+ * @returns {string} Sanitized query string
+ */
+function sanitizeQueryText(text) {
+  if (typeof text !== 'string') return '';
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
+ * Encodes query parameters safely for URL queries.
+ * @param {string} param - Search input parameter
+ * @returns {string} Encoded URI query component
+ */
+function encodeQueryParameter(param) {
+  if (typeof param !== 'string') return '';
+  // Strip common special character symbols using regex
+  const stripped = param.replace(/[~`!@#$%^&*()_+={}\[\]|\\:;"'<>,.?\/]/g, '');
+  return encodeURIComponent(stripped);
+}
+
