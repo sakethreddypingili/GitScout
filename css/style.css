@@ -1,0 +1,96 @@
+/* css/style.css */
+:root {
+  --primary: #24292e;
+  --accent: #0366d6;
+  --bg: #f6f8fa;
+  --card-bg: #ffffff;
+  --text: #2f363d;
+  --border: #e1e4e8;
+  --error: #cb2431;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.site-header {
+  background-color: var(--primary);
+  color: white;
+  padding: 1.5rem 0;
+}
+
+.search-section {
+  margin: 2rem 0;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn--primary {
+  background-color: var(--accent);
+  color: white;
+}
+
+.loader-wrapper {
+  display: none;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.loader-wrapper.active {
+  display: block;
+}
+
+.spinner {
+  border: 4px solid rgba(0,0,0,0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: var(--accent);
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
