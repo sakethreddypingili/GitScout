@@ -1,169 +1,116 @@
 /**
- * Main Entry Point - Hyper Premium Version
+ * js/main.js
+ * Form submit listeners, validation, and spinner load views.
  */
-import { fetchUser, fetchRepos } from './api.js';
-import { sortRepositories, calculateLanguageStats } from './utils.js';
-import { renderProfile, renderRepos, renderLegend, showLoading, showError } from './ui.js';
-import { renderDonutChart } from './chart.js';
-import { initGitGraph, implodeNodes, initCardTilt, initDashboardTilt, initAppGitGraph, resetLandingAnimations } from './animations.js';
 
-// --- State Management ---
-const state = {
-    isLoading: false,
-    user: null,
-    repos: [],
-    currentSort: 'stars',
-    langStats: []
-};
+// Register query form submit listeners
+document.addEventListener('DOMContentLoaded', () => {
+  const searchForm = document.getElementById('search-form');
+  const searchInput = document.getElementById('search-input');
+  const searchError = document.getElementById('search-error');
+  const loader = document.getElementById('loader');
 
-// --- Selectors ---
-const landingView = document.getElementById('landing-view');
-const appView = document.getElementById('app-view');
-const landingSearchForm = document.getElementById('landing-search-form');
-const landingSearchInput = document.getElementById('landing-search-input');
-const appSearchForm = document.getElementById('app-search-form');
-const appSearchInput = document.getElementById('app-search-input');
-const sortSelect = document.getElementById('sort-select');
-const backToLanding = document.getElementById('back-to-landing');
-const parallaxBg = document.getElementById('parallax-bg');
+  if (searchForm) {
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const rawValue = searchInput.value;
+      // Sanitize input field parameters validation
+      const cleanValue = sanitizeQueryText(rawValue);
+      
+      if (!cleanValue || cleanValue.trim().length === 0) {
+        searchError.textContent = 'Please enter a valid username.';
+        return;
+      }
+      
+      searchError.textContent = '';
+      
+      // Execute loading view toggle (activate spinner loader)
+      loader.classList.add('active');
+      loader.setAttribute('aria-hidden', 'false');
 
-// --- Caching Logic ---
-const CACHE_PREFIX = 'github_explorer_';
-const CACHE_EXPIRY = 5 * 60 * 1000;
-
-function getCachedData(username) {
-    const cached = sessionStorage.getItem(CACHE_PREFIX + username.toLowerCase());
-    if (cached) {
-        const { data, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < CACHE_EXPIRY) return data;
-    }
-    return null;
-}
-
-function setCachedData(username, data) {
-    const cacheObj = { data, timestamp: Date.now() };
-    sessionStorage.setItem(CACHE_PREFIX + username.toLowerCase(), JSON.stringify(cacheObj));
-}
-
-// --- Hyper Effects ---
-
-/**
- * Parallax Background Effect
- */
-function handleParallax(e) {
-    const { clientX, clientY } = e;
-    const xPos = (clientX / window.innerWidth - 0.5) * 40;
-    const yPos = (clientY / window.innerHeight - 0.5) * 40;
-    
-    parallaxBg.style.transform = `translate(${xPos}px, ${yPos}px)`;
-}
-
-/**
- * View Transitions with flair
- */
-function switchToAppView() {
-    landingView.classList.add('hidden');
-    appView.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    initAppGitGraph();
-}
-
-function switchToLandingView() {
-    appView.classList.add('hidden');
-    landingView.classList.remove('hidden');
-    state.user = null;
-    state.repos = [];
-    landingSearchInput.value = '';
-    landingSearchInput.focus();
-    // Restart node graph and card flip reveal when returning to landing
-    resetLandingAnimations();
-}
-
-// --- Event Handlers ---
-
-async function handleSearch(e, input) {
-    e.preventDefault();
-    const username = input.value.trim();
-    if (!username) return;
-
-    const performSearch = async () => {
-        showLoading();
-        switchToAppView();
-        input.blur();
-
-        const cached = getCachedData(username);
-        if (cached) {
-            updateState(cached.user, cached.repos);
-            renderApp();
-            return;
-        }
-
-        try {
-            const [user, repos] = await Promise.all([
-                fetchUser(username),
-                fetchRepos(username)
-            ]);
-
-            updateState(user, repos);
-            setCachedData(username, { user, repos });
-            renderApp();
-        } catch (error) {
-            showError(error.message);
-        }
-    };
-
-    // If we're on the landing view, trigger node implosion transition first
-    if (!landingView.classList.contains('hidden') && input === landingSearchInput) {
-        input.blur();
-        implodeNodes(landingSearchForm, performSearch);
-    } else {
-        await performSearch();
-    }
-}
-
-function handleSort(e) {
-    state.currentSort = e.target.value;
-    state.repos = sortRepositories(state.repos, state.currentSort);
-    renderRepos(state.repos);
-}
-
-// --- Orchestration ---
-
-function updateState(user, repos) {
-    state.user = user;
-    state.repos = sortRepositories(repos, state.currentSort);
-    state.langStats = calculateLanguageStats(repos);
-}
-
-function renderApp() {
-    renderProfile(state.user);
-    renderRepos(state.repos);
-    renderDonutChart(state.langStats, 'languages-chart');
-    renderLegend(state.langStats);
-    initDashboardTilt();
-}
-
-// --- Initialization ---
-
-function init() {
-    landingSearchForm.addEventListener('submit', (e) => handleSearch(e, landingSearchInput));
-    appSearchForm.addEventListener('submit', (e) => handleSearch(e, appSearchInput));
-    sortSelect.addEventListener('change', handleSort);
-    backToLanding.addEventListener('click', (e) => {
-        e.preventDefault();
-        switchToLandingView();
+      // Trigger profile details request pipeline
+      buildProfileDetailsPipeline(cleanValue);
     });
+  }
+});
 
-    window.addEventListener('mousemove', handleParallax);
-
-    // Initialize premium animations
-    initGitGraph();
-    initCardTilt();
-
-    // Initial icon setup
-    if (window.lucide) {
-        window.lucide.createIcons();
-    }
+/**
+ * Toggles loader visibility state off.
+ */
+function hideLoader() {
+  const loader = document.getElementById('loader');
+  if (loader) {
+    loader.classList.remove('active');
+    loader.setAttribute('aria-hidden', 'true');
+  }
 }
 
-document.addEventListener('DOMContentLoaded', init);
+/**
+ * Asynchronously query Github user profile details API pipeline.
+ * Captures rate limit headers and renders output to details card.
+ * @param {string} username - Sanitized username to search
+ */
+async function buildProfileDetailsPipeline(username) {
+  const profileSection = document.getElementById('profile-section');
+  const profileCard = document.getElementById('profile-card');
+  const rateLimitInfo = document.getElementById('rate-limit-info');
+  const searchError = document.getElementById('search-error');
+  
+  const encodedUser = encodeQueryParameter(username);
+  const endpoint = `https://api.github.com/users/${encodedUser}`;
+  
+  try {
+    const response = await fetch(endpoint);
+    
+    // Capture rate-limiting headers
+    const limit = response.headers.get('X-RateLimit-Limit') || 'N/A';
+    const remaining = response.headers.get('X-RateLimit-Remaining') || 'N/A';
+    rateLimitInfo.textContent = `GitHub API Rate Limit: ${remaining} / ${limit} remaining`;
+    
+    // Handle response checks & status flags
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('GitHub profile not found.');
+      } else {
+        throw new Error(`API Request failed with status ${response.status}`);
+      }
+    }
+    
+    const data = await response.json();
+    
+    // Clean data object values
+    const profileData = {
+      login: data.login || 'Unknown',
+      avatarUrl: data.avatar_url || '',
+      name: data.name || 'No Name Provided',
+      bio: data.bio || 'This profile has no bio.',
+      publicRepos: typeof data.public_repos === 'number' ? data.public_repos : 0,
+      followers: typeof data.followers === 'number' ? data.followers : 0,
+      createdAt: data.created_at || ''
+    };
+    
+    // Render results
+    profileCard.innerHTML = `
+      <div class="profile-header">
+        <img src="${profileData.avatarUrl}" alt="${profileData.login}'s avatar" class="profile-avatar" width="80" height="80" />
+        <div>
+          <h2>${profileData.name} (@${profileData.login})</h2>
+          <p class="joined-date">Joined: ${parseCalendarDate(profileData.createdAt)}</p>
+        </div>
+      </div>
+      <p class="profile-bio">${profileData.bio}</p>
+      <div class="profile-stats">
+        <span><strong>Repositories:</strong> ${formatCompactNumber(profileData.publicRepos)}</span>
+        <span><strong>Followers:</strong> ${formatCompactNumber(profileData.followers)}</span>
+      </div>
+    `;
+    profileSection.style.display = 'block';
+  } catch (error) {
+    searchError.textContent = error.message;
+    profileSection.style.display = 'none';
+  } finally {
+    hideLoader();
+  }
+}
+
