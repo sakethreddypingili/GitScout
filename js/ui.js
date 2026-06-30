@@ -89,3 +89,95 @@ export function renderProfile(user) {
         <div class="profile-info" style="display: flex; flex-direction: column; gap: 12px; color: var(--text-muted); font-weight: 600;">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="calendar" size="18"></i> <span>Joined ${formatDate(user.created_at)}</span>
+            </div>
+            ${user.location ? `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="map-pin" size="18"></i> <span>${escapeHTML(user.location)}</span>
+                </div>
+            ` : ''}
+        </div>
+    `;
+    refreshIcons();
+}
+
+/**
+ * Renders the repository list with hyper cards
+ * @param {Array} repos 
+ */
+export function renderRepos(repos) {
+    statusContainer.innerHTML = '';
+    contentContainer.classList.remove('hidden');
+    
+    reposCountBadge.textContent = repos.length;
+    reposContainer.innerHTML = '';
+    
+    if (repos.length >= 100) {
+        paginationNotice.classList.remove('hidden');
+    } else {
+        paginationNotice.classList.add('hidden');
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    repos.forEach((repo, index) => {
+        const card = document.createElement('div');
+        card.className = 'card-hyper repo-card-hyper';
+        card.style.setProperty('--stagger-idx', index);
+        
+        card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                <i data-lucide="book-marked" style="color: var(--primary);"></i>
+                <div style="display: flex; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 4px; font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">
+                        <i data-lucide="star" size="14"></i> ${repo.stargazers_count}
+                    </div>
+                </div>
+            </div>
+            <a href="${repo.html_url}" target="_blank" class="repo-name">${escapeHTML(repo.name)}</a>
+            <p class="repo-desc">${escapeHTML(repo.description) || 'An elite repository awaiting its description.'}</p>
+            <div class="repo-footer">
+                ${repo.language ? `
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: ${getLanguageColor(repo.language)}; border: 2px solid white; box-shadow: 0 0 0 1px var(--border);"></span>
+                        <span>${escapeHTML(repo.language)}</span>
+                    </div>
+                ` : ''}
+                <div style="margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-dim);">
+                    <i data-lucide="git-fork" size="14"></i> ${repo.forks_count}
+                </div>
+            </div>
+        `;
+        
+        fragment.appendChild(card);
+    });
+
+    reposContainer.appendChild(fragment);
+    refreshIcons();
+}
+
+/**
+ * Renders the chart legend with hyper styling
+ * @param {Array} stats 
+ */
+export function renderLegend(stats) {
+    const legendContainer = document.getElementById('chart-legend');
+    legendContainer.innerHTML = '';
+    
+    stats.forEach(stat => {
+        const item = document.createElement('div');
+        item.style.display = 'flex';
+        item.style.alignItems = 'center';
+        item.style.gap = '12px';
+        item.style.fontSize = '1rem';
+        item.style.fontWeight = '700';
+        item.style.color = 'var(--text-main)';
+        item.style.padding = '8px 0';
+        
+        item.innerHTML = `
+            <span style="width: 14px; height: 14px; border-radius: 6px; background: ${getLanguageColor(stat.label)}; box-shadow: 0 4px 10px -2px ${getLanguageColor(stat.label)};"></span>
+            <span style="flex: 1;">${escapeHTML(stat.label)}</span>
+            <span style="color: var(--primary); font-weight: 800;">${Math.round(stat.value)}%</span>
+        `;
+        legendContainer.appendChild(item);
+    });
+}
