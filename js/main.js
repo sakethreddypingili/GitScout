@@ -160,6 +160,17 @@ function init() {
     initGitGraph();
     initCardTilt();
 
+    const tokenBtn = document.getElementById('token-settings-btn');
+    if (tokenBtn) {
+        tokenBtn.addEventListener('click', () => {
+            const token = prompt('Enter your GitHub Personal Access Token (PAT) to bypass the rate limit:', localStorage.getItem('github_token') || '');
+            if (token !== null) {
+                localStorage.setItem('github_token', token.trim());
+                alert('GitHub PAT saved successfully!');
+            }
+        });
+    }
+
     // Initial icon setup
     if (window.lucide) {
         window.lucide.createIcons();
