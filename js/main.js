@@ -82,3 +82,35 @@ async function buildProfileDetailsPipeline(username) {
     // Clean data object values
     const profileData = {
       login: data.login || 'Unknown',
+      avatarUrl: data.avatar_url || '',
+      name: data.name || 'No Name Provided',
+      bio: data.bio || 'This profile has no bio.',
+      publicRepos: typeof data.public_repos === 'number' ? data.public_repos : 0,
+      followers: typeof data.followers === 'number' ? data.followers : 0,
+      createdAt: data.created_at || ''
+    };
+    
+    // Render results
+    profileCard.innerHTML = `
+      <div class="profile-header">
+        <img src="${profileData.avatarUrl}" alt="${profileData.login}'s avatar" class="profile-avatar" width="80" height="80" />
+        <div>
+          <h2>${profileData.name} (@${profileData.login})</h2>
+          <p class="joined-date">Joined: ${parseCalendarDate(profileData.createdAt)}</p>
+        </div>
+      </div>
+      <p class="profile-bio">${profileData.bio}</p>
+      <div class="profile-stats">
+        <span><strong>Repositories:</strong> ${formatCompactNumber(profileData.publicRepos)}</span>
+        <span><strong>Followers:</strong> ${formatCompactNumber(profileData.followers)}</span>
+      </div>
+    `;
+    profileSection.style.display = 'block';
+  } catch (error) {
+    searchError.textContent = error.message;
+    profileSection.style.display = 'none';
+  } finally {
+    hideLoader();
+  }
+}
+
